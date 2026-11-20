@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Chrome Studio — GTA-Style Cover Art Maker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="topbar">
+  <div id="brand">
+    <span id="brand-mark">VICE&nbsp;CHROME&nbsp;STUDIO</span>
+    <span id="brand-tag">gta-style cover art maker</span>
+  </div>
+  <p id="privacy-note">Your photos never leave this machine. The app works fully offline.</p>
+</header>
+
+<main id="workspace">
+  <section id="stage">
+    <canvas id="coverCanvas" width="1920" height="1080"></canvas>
+    <p id="hint">Click a panel to select it, then click a photo to place it. Drag on the cover to reposition the photo; scroll to zoom; double-click a panel to reset its crop.</p>
+  </section>
+
+  <aside id="controls">
+    <div class="card" id="photos-card">
+      <h2>1 · Photos</h2>
+      <div class="row">
+        <label id="addPhotosBtn" class="btn primary" for="fileInput">Add photos</label>
+        <input id="fileInput" type="file" accept="image/*" multiple hidden>
+        <button id="castBtn" class="btn" type="button">Try the cast samples</button>
+      </div>
+      <p class="small">The studio opens with five bundled cast portraits — the Siren, the Gambler, the Surfer, the Heiress and the DJ — dealt into the Ensemble Five cover; two more portraits — the Vixen and the Showgirl — plus a neon motel scene and its wide panorama framing ride in the tray for the Motel Row preset. Add your own photos here or drag &amp; drop them onto the cover, then place them panel by panel.</p>
+      <div id="tray"></div>
+    </div>
+
+    <div class="card" id="layout-card">
+      <h2>2 · Layout &amp; grade</h2>
+      <div class="row" id="layoutGroup" role="group" aria-label="Panel layout">
+        <button type="button" class="btn chip" data-layout="ensemble">Ensemble Five</button>
+        <button type="button" class="btn chip" data-layout="motel">Motel Row</button>
+        <button type="button" class="btn chip" data-layout="quad">Poster Quad</button>
+        <button type="button" class="btn chip" data-layout="triptych">Triptych</button>
+        <button type="button" class="btn chip" data-layout="hero">Hero + Duo</button>
+        <button type="button" class="btn chip" data-layout="strips">Slanted Strips</button>
+        <button type="button" class="btn chip" data-layout="popout">Pop-Out Hero</button>
+        <button type="button" class="btn chip" data-layout="grid">Grid Six</button>
+      </div>
+      <div class="row" id="gradeGroup" role="group" aria-label="Colour grade">
+        <button type="button" class="btn chip" data-grade="sunset">Vice Sunset</button>
+        <button type="button" class="btn chip" data-grade="neon">Neon Nights</button>
+        <button type="button" class="btn chip" data-grade="gold">Golden Hour</button>
+        <button type="button" class="btn chip" data-grade="teal">Teal Dusk</button>
+        <button type="button" class="btn chip" data-grade="noir">Mono Noir</button>
+        <button type="button" class="btn chip" data-grade="raw">No Grade</button>
+      </div>
+    </div>
+
+    <div class="card" id="panel-card">
+      <h2>3 · Panel</h2>
+      <p class="small" id="panelLabel">Selected panel: 1</p>
+      <div class="row">
+        <label class="small" for="zoomRange">Zoom</label>
+        <input id="zoomRange" type="range" min="1" max="4" step="0.01" value="1">
+      </div>
+      <div class="row">
+        <label class="small" for="tagInput">Cast tag</label>
+        <input id="tagInput" type="text" maxlength="24" value="THE SIREN" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="row">
+        <button id="resetCropBtn" class="btn" type="button">Reset crop</button>
+        <button id="clearPanelBtn" class="btn" type="button">Clear panel photo</button>
+      </div>
+      <label class="row check"><input id="tagsToggle" type="checkbox" checked> Show cast tags on the cover</label>
+    </div>
+
+    <div class="card" id="caption-card">
+      <h2>4 · Chrome caption</h2>
+      <input id="captionInput" type="text" maxlength="30" value="VELVET HEAT" autocomplete="off" spellcheck="false">
+      <div class="row">
+        <label class="small" for="captionSize">Size</label>
+        <input id="captionSize" type="range" min="0.6" max="1.5" step="0.05" value="1">
+        <button id="captionPosBtn" class="btn" type="button">Caption: top</button>
+      </div>
+      <label class="row check"><input id="subtitleToggle" type="checkbox" checked> Script subtitle</label>
+      <input id="subtitleInput" type="text" maxlength="40" value="no saints after dark" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="card" id="dressing-card">
+      <h2>5 · Poster dressing</h2>
+      <label class="row check"><input id="quoteToggle" type="checkbox" checked> Review-quote strip</label>
+      <input id="quoteInput" type="text" maxlength="60" value="SIN NEVER LOOKED THIS GOOD" autocomplete="off" spellcheck="false">
+      <div class="row">
+        <label class="small" for="quoteSourceInput">Source</label>
+        <input id="quoteSourceInput" type="text" maxlength="40" value="THE BAYSIDE BUGLE" autocomplete="off" spellcheck="false">
+      </div>
+      <label class="row check"><input id="taglineToggle" type="checkbox" checked> Tagline ribbon</label>
+      <input id="taglineInput" type="text" maxlength="60" value="FIVE SINS · ONE CITY · NO SAINTS" autocomplete="off" spellcheck="false">
+      <label class="row check"><input id="extrasToggle" type="checkbox" checked> Poster extras (VOL. 1 badge, COMING SOON, barcode)</label>
+      <label class="row check"><input id="sealToggle" type="checkbox" checked> Round seal</label>
+      <div class="row">
+        <label class="small" for="sealPos">Seal corner</label>
+        <select id="sealPos">
+          <option value="br" selected>Bottom right</option>
+          <option value="bl">Bottom left</option>
+          <option value="tr">Top right</option>
+        </select>
+      </div>
+      <label class="row check"><input id="billingToggle" type="checkbox" checked> Billing block</label>
+      <input id="billingInput" type="text" maxlength="140" value="VICE CHROME STUDIO presents VELVET HEAT · starring five sinners · shot in LEONIDA · no saints were consulted" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="card" id="export-card">
+      <h2>6 · Export</h2>
+      <div class="row" id="sizeGroup" role="group" aria-label="Export size">
+        <button type="button" class="btn chip" data-size="square">1080 × 1080</button>
+        <button type="button" class="btn chip" data-size="portrait">1080 × 1350</button>
+        <button type="button" class="btn chip" data-size="wide">1920 × 1080</button>
+      </div>
+      <button id="exportBtn" class="btn primary big" type="button">Export PNG</button>
+    </div>
+  </aside>
+</main>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

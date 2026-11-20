@@ -1,0 +1,229 @@
+/* Vice Chrome Studio — editor chrome. A dark violet room with chrome and
+   sunset accents; the cover canvas is the bright thing on the page.
+   System font stack only: the app ships no font files, and its cover
+   lettering is painted on canvas, not typed. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #12061f;
+  color: #f5ead9;
+  font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+#topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px 10px;
+  background: linear-gradient(90deg, #240a44, #57154f 55%, #8a2a52);
+  border-bottom: 3px solid #c0d8f0;
+}
+
+#brand { display: flex; align-items: baseline; gap: 12px; }
+
+#brand-mark {
+  font-weight: 900;
+  font-size: 25px;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, #f2faff 0%, #aedcff 30%, #5f97d8 48%, #ffffff 50%, #ff4fc3 56%, #93339f 78%, #4a1c6e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(2px 3px 0 rgba(10, 1, 24, 0.85));
+}
+
+#brand-tag {
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #ffb37a;
+}
+
+#privacy-note { margin: 0; font-size: 12.5px; color: #e8cfa8; }
+
+#workspace {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 18px 22px 26px;
+  max-width: 1560px;
+  margin: 0 auto;
+}
+
+#stage { flex: 1 1 auto; min-width: 320px; }
+
+#coverCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #0d0518;
+  border: 1px solid #3a1c66;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5);
+  cursor: grab;
+  touch-action: none;
+}
+
+#coverCanvas:active { cursor: grabbing; }
+
+#hint { font-size: 12.5px; color: #b9a6d6; margin: 10px 2px 0; }
+
+#controls {
+  flex: 0 0 308px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: #1d0b36;
+  border: 1px solid #3a1c66;
+  border-radius: 10px;
+  padding: 13px 14px 14px;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #ffd23e;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.row:last-child { margin-bottom: 0; }
+
+.small { font-size: 12.5px; color: #cbb9e8; margin: 0 0 8px; }
+
+label.small { margin: 0; }
+
+.btn {
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border: 1px solid #5b3691;
+  border-radius: 7px;
+  background: #2b1150;
+  color: #f5ead9;
+  cursor: pointer;
+}
+
+.btn:hover { background: #3a1a68; }
+
+.btn.primary {
+  background: linear-gradient(180deg, #ff5da2, #d61c7f);
+  border-color: #ff8ac0;
+  color: #ffffff;
+}
+
+.btn.primary:hover { background: linear-gradient(180deg, #ff74ae, #e0218a); }
+
+.btn.big { width: 100%; padding: 11px; font-size: 15px; margin-top: 4px; }
+
+.btn.chip { padding: 6px 10px; font-size: 12.5px; border-radius: 999px; }
+
+.btn.chip.active {
+  background: #ffd23e;
+  border-color: #ffe89a;
+  color: #2b1150;
+}
+
+input[type="text"] {
+  font: inherit;
+  font-size: 14px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #5b3691;
+  border-radius: 7px;
+  background: #150826;
+  color: #fff3d6;
+  margin-bottom: 8px;
+}
+
+.row input[type="text"] { flex: 1 1 auto; width: auto; margin-bottom: 0; }
+
+input[type="range"] { flex: 1 1 auto; accent-color: #ff2e88; }
+
+select {
+  font: inherit;
+  font-size: 13.5px;
+  padding: 6px 8px;
+  border: 1px solid #5b3691;
+  border-radius: 7px;
+  background: #150826;
+  color: #f5ead9;
+}
+
+.row.check {
+  font-size: 13px;
+  color: #e8dcf7;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.row.check input { accent-color: #ff2e88; }
+
+#tray {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.thumb {
+  position: relative;
+  width: 76px;
+  cursor: pointer;
+}
+
+.thumb img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 2px solid #5b3691;
+  display: block;
+}
+
+.thumb:hover img { border-color: #ffd23e; }
+
+.thumb-name {
+  display: block;
+  font-size: 10px;
+  color: #b9a6d6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 3px;
+}
+
+.fill-all {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(21, 8, 38, 0.85);
+  color: #ffd23e;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  #workspace { flex-direction: column; }
+  #controls { flex: 1 1 auto; width: 100%; }
+}
