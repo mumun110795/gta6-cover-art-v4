@@ -1,43 +1,46 @@
-// main.ts — the handover program for Vice Chrome Studio.
+// Vice Chrome Studio — handover entrypoint for gta6-cover-art-01.
+// This program is the delivery plumbing for the finished app: it copies the
+// static app/ folder (the cover studio itself) and the screenshots/ folder
+// into the output directory, then writes dossier.json there via buildDossier
+// from vendor/makefun-app.ts, producing the summary the judge scores from.
 //
-// The app itself is the static site in app/ (open app/index.html from any
-// static file server; it runs offline in a desktop browser). This program
-// hands the entry in the way the bounty asks: it copies app/ and
-// screenshots/ from beside this file into the output directory and writes
-// dossier.json there with buildDossier from the vendored make.fun library
-// (vendor/makefun-app.ts, the kit's copy, kept byte for byte). The output
-// directory is /output in the grader; anywhere else, MAKEFUN_OUTPUT_DIR
-// names it instead:
+// A working gta6-cover-art-01 entry (Node 22, standard library only): the app is this directory's app/ folder, plain
+// static files a desktop browser loads offline (app/index.html and its ES modules, no library and no network
+// request), and the program hands it in. It copies app/ and screenshots/ from beside this file to /output and writes
+// /output/dossier.json, the summary the judge reads, with the vendored make.fun library. Only the plumbing, not the
+// cover art the bounty asks for: Cover Snap, a plain one-photo square cover with a sunset tint and a bold caption,
+// exported as a 1080 x 1080 PNG. Its two sample photos (app/samples/) were made for make.fun with an image model and
+// are free to use. Build your own GTA-style cover maker in its place, put your 3 or 4 PNG or JPEG screenshots in
+// screenshots/ (the first by name is the cover) and run it.
 //
+// Serve it locally with `node serve.ts`, then open http://localhost:8080.
+// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-//
-// Node 22 standard library only; nothing is installed before it runs, and
-// two runs over the same repository write the same bytes.
 
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
 
-const repoDir = fileURLToPath(new URL('.', import.meta.url));
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const here = fileURLToPath(new URL('.', import.meta.url));
+const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-// The gate's caps, passed to the dossier builder so an entry the scorer
-// would refuse (too many app files, an oversized screenshot, a dossier
-// text over its cap) fails here first instead of at grading.
-const GATE_CAPS = {
-  text_max_bytes: 163840,
-  screenshots: { max: 4, max_bytes: 262144 },
-  app_max_files: 993,
-  app_max_bytes: 50331648,
-  app_path_max_bytes: 1000,
-};
+mkdirSync(out, { recursive: true });
+cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
+mkdirSync(join(out, 'screenshots'), { recursive: true });
+if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
 
-mkdirSync(outDir, { recursive: true });
-cpSync(join(repoDir, 'app'), join(outDir, 'app'), { recursive: true });
-mkdirSync(join(outDir, 'screenshots'), { recursive: true });
-if (existsSync(join(repoDir, 'screenshots'))) {
-  cpSync(join(repoDir, 'screenshots'), join(outDir, 'screenshots'), { recursive: true });
-}
-
-writeFileSync(join(outDir, 'dossier.json'), buildDossier(outDir, GATE_CAPS));
+// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the bytes; the others refuse an entry the
+// scorer would refuse (more than 4 screenshots or one over 256 KiB; more than 993 files in app/ or 48 MiB of app
+// files, in all, or a path under app/ over 1000 bytes: app/ counts beside /output's own 1000-entry cap, its
+// screenshots/ and dossier.json).
+writeFileSync(
+  join(out, 'dossier.json'),
+  buildDossier(out, {
+    text_max_bytes: 163840,
+    screenshots: { max: 4, max_bytes: 262144 },
+    app_max_files: 993,
+    app_max_bytes: 50331648,
+    app_path_max_bytes: 1000,
+  }),
+);
