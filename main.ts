@@ -1,8 +1,9 @@
 // Vice Chrome Studio — handover entrypoint for gta6-cover-art-01.
-// This program is the delivery plumbing for the finished app: it copies the
-// static app/ folder (the cover studio itself) and the screenshots/ folder
-// into the output directory, then writes dossier.json there via buildDossier
-// from vendor/makefun-app.ts, producing the summary the judge scores from.
+// The cover maker itself is the static app under app/ (open app/index.html
+// in any browser; it runs fully offline). This program is the delivery
+// plumbing: it copies app/ and screenshots/ into the output directory,
+// then writes dossier.json there via buildDossier from
+// vendor/makefun-app.ts — the summary the judge reads and scores from.
 //
 // A working gta6-cover-art-01 entry (Node 22, standard library only): the app is this directory's app/ folder, plain
 // static files a desktop browser loads offline (app/index.html and its ES modules, no library and no network
